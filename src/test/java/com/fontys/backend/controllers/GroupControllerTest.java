@@ -60,7 +60,7 @@ class GroupControllerTest {
     @Test
     void getGroupByIdShouldReturnGroup()
     {
-        Group g = new Group(1);
+        Group g = new Group("Group", new User());
 
         Mockito.when(groupRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(g));
 
@@ -72,8 +72,8 @@ class GroupControllerTest {
     void addUserToGroupShouldReturnGroupWithUser()
     {
         User u = new User();
-        Group gWithout = new Group(1);
-        Group gWith = new Group(1);
+        Group gWithout = new Group("Group", u);
+        Group gWith = new Group("Group", u);
         gWith.getUsers().add(u);
 
         Mockito.when(groupRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(gWithout));
