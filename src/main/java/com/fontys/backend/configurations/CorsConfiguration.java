@@ -10,7 +10,7 @@ public class CorsConfiguration implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry corsRegistry) {
         corsRegistry.addMapping("/**")
-                .allowedOrigins("https://bestel-app-web.herokuapp.com/", "http://localhost:4200")
+                .allowedOrigins("https://bestel-app-web.herokuapp.com", "http://localhost:4200")
                 .allowedMethods("POST","GET")
                 .allowedHeaders("*")
                 .maxAge(3600);
