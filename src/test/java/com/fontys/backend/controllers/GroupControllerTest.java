@@ -79,7 +79,7 @@ class GroupControllerTest {
         Mockito.when(groupRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(gWithout));
         Mockito.when(userRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(u));
 
-        assertTrue(groupService.addUserToGroup(gWith));
+        assertTrue(groupService.addUserToGroup(gWith.getId(), u));
         Mockito.verify(groupRepository,times(1)).findById(gWithout.getId());
         Mockito.verify(userRepository,times(1)).findById(u.getId());
         Mockito.verify(groupRepository,times(1)).save(gWith);

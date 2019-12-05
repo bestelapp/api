@@ -1,6 +1,7 @@
 package com.fontys.backend.controllers;
 
 import com.fontys.backend.entities.Group;
+import com.fontys.backend.entities.User;
 import com.fontys.backend.services.GroupService;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,8 +32,8 @@ public class GroupController {
         return groupService.create(group);
     }
 
-    @PostMapping
-    public Boolean addUserToGroup(@RequestBody Group group) {
-        return groupService.addUserToGroup(group);
+    @PostMapping("/addUser/{id}")
+    public Boolean addUserToGroup(@PathVariable Integer id, @RequestBody User user) {
+        return groupService.addUserToGroup(id, user);
     }
 }

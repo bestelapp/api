@@ -25,7 +25,7 @@ public class GroupService {
     public Group create(Group group) {
         Optional<User> u = userRepository.findById(group.getOwner().getId());
         if (u.isPresent()) {
-            Group g = new Group(group.getName(), group.getOwner());
+            Group g = new Group(group.getName(), u.get());
             try {
                 return groupRepository.save(g);
             } catch (DataIntegrityViolationException e) {
@@ -37,24 +37,33 @@ public class GroupService {
     }
 
     public Group getById(Integer id) {
-        return groupRepository.findById(id).orElse(null);
+        Optional<Group> group = groupRepository.findById(id);
+        if (group.isPresent()) {
+            group.get().getOwner().setHash(null);
+            group.get().getOwner().setSalt(null);
+            for (User u : group.get().getUsers()) {
+                u.setHash(null);
+                u.setSalt(null);
+            }
+            return group.get();
+        }
+        return null;
     }
 
     public List<Group> getAll() {
         return groupRepository.findAll();
     }
 
-    public Boolean addUserToGroup(Group group) {
-        Group g = getById(group.getId());
+    public Boolean addUserToGroup(Integer id, User user) {
+        Group g = getById(id);
         if (g != null) {
-            for (User u : group.getUsers()) {
-                Optional<User> user = userRepository.findById(u.getId());
-                if (user.isPresent()) {
-                    g.getUsers().add(user.get());
-                    groupRepository.save(g);
-                }
+            Optional<User> u = userRepository.findById(user.getId());
+            if (u.isPresent()) {
+                g.getUsers().add(u.get());
+                groupRepository.save(g);
+                return true;
             }
-            return true;
+            return false;
         }
         return false;
     }
