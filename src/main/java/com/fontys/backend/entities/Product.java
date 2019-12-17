@@ -21,9 +21,13 @@ public class Product {
     private String name;
 
     @Column
+    private int amount;
+
+    @Column
     private double price;
 
-    public Product(String name) {
+    public Product(String name, int amount) {
         this.name = name;
+        this.amount = amount;
     }
 }

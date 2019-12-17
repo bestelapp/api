@@ -52,7 +52,7 @@ class ProductControllerTest {
     @Test
     void getByIdShouldReturnOrder()
     {
-        Product p = new Product(1,"Product",1);
+        Product p = new Product(1,"Product",1,1);
 
         Mockito.when(productRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(p));
 

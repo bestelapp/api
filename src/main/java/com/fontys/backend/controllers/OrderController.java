@@ -39,7 +39,7 @@ public class OrderController {
     public Order create(@RequestBody Order order) {
         List<Product> products = new ArrayList<>();
         for (Product p : order.getProducts()) {
-            products.add(productService.create(new Product(p.getName())));
+            products.add(productService.create(new Product(p.getName(),p.getAmount())));
         }
         User u = userService.getById( order.getUser().getId());
         if (u != null && !products.isEmpty()) {
