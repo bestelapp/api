@@ -38,9 +38,9 @@ public class Group {
         this.users = new ArrayList<>();
     }
 
-    public Group(String name, User owner) {
+    public Group(String name, User owner, List<User> users) {
         this.name = name;
         this.owner = owner;
-        this.users = new ArrayList<>();
+        this.users = users;
     }
 }

@@ -26,7 +26,12 @@ public class UserService {
     }
 
     public List<User> getAll() {
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        for (User u : users) {
+            u.setHash(null);
+            u.setSalt(null);
+        }
+        return users;
     }
 
     public User register(User user) {

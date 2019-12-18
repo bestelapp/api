@@ -1,6 +1,7 @@
 package com.fontys.backend.services;
 
 import com.fontys.backend.entities.Group;
+import com.fontys.backend.entities.Product;
 import com.fontys.backend.entities.User;
 import com.fontys.backend.repositories.GroupRepository;
 import com.fontys.backend.repositories.UserRepository;
@@ -25,7 +26,8 @@ public class GroupService {
     public Group create(Group group) {
         Optional<User> u = userRepository.findById(group.getOwner().getId());
         if (u.isPresent()) {
-            Group g = new Group(group.getName(), u.get());
+            List<User> users = Collections.singletonList(u.get());
+            Group g = new Group(group.getName(), u.get(), users);
             try {
                 return groupRepository.save(g);
             } catch (DataIntegrityViolationException e) {
@@ -58,7 +60,7 @@ public class GroupService {
         Group g = getById(id);
         if (g != null) {
             Optional<User> u = userRepository.findById(user.getId());
-            if (u.isPresent()) {
+            if (u.isPresent() && !g.getUsers().contains(u.get())) {
                 g.getUsers().add(u.get());
                 groupRepository.save(g);
                 return true;
@@ -68,4 +70,17 @@ public class GroupService {
         return false;
     }
 
+    public Boolean removeUserFromGroup(Integer id, User user) {
+        Group g = getById(id);
+        if (g != null) {
+            Optional<User> u = userRepository.findById(user.getId());
+            if (u.isPresent() && g.getUsers().contains(u.get())) {
+                g.getUsers().remove(u.get());
+                groupRepository.save(g);
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
 }

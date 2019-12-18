@@ -36,4 +36,9 @@ public class GroupController {
     public Boolean addUserToGroup(@PathVariable Integer id, @RequestBody User user) {
         return groupService.addUserToGroup(id, user);
     }
+
+    @PostMapping("/removeUser/{id}")
+    public Boolean removeUserFromGroup(@PathVariable Integer id, @RequestBody User user) {
+        return groupService.removeUserFromGroup(id, user);
+    }
 }

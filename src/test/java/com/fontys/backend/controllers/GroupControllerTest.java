@@ -10,10 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -37,7 +34,7 @@ class GroupControllerTest {
     void createShouldReturnGroup()
     {
         User u = new User();
-        Group g = new Group("Group", u);
+        Group g = new Group("Group", u, List.of(u));
 
         Mockito.when(userRepository.findById(Mockito.any(Integer.class))).thenReturn(Optional.of(u));
         Mockito.when(groupRepository.save(Mockito.any(Group.class))).thenReturn(g);
@@ -60,7 +57,7 @@ class GroupControllerTest {
     @Test
     void getGroupByIdShouldReturnGroup()
     {
-        Group g = new Group("Group", new User());
+        Group g = new Group("Group", new User(), Collections.singletonList(new User()));
 
         Mockito.when(groupRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(g));
 
@@ -72,9 +69,8 @@ class GroupControllerTest {
     void addUserToGroupShouldReturnGroupWithUser()
     {
         User u = new User();
-        Group gWithout = new Group("Group", u);
-        Group gWith = new Group("Group", u);
-        gWith.getUsers().add(u);
+        Group gWithout = new Group("Group", u, new ArrayList<>(List.of()));
+        Group gWith = new Group("Group", u, new ArrayList<>(List.of(u)));
 
         Mockito.when(groupRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(gWithout));
         Mockito.when(userRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(u));
@@ -83,5 +79,21 @@ class GroupControllerTest {
         Mockito.verify(groupRepository,times(1)).findById(gWithout.getId());
         Mockito.verify(userRepository,times(1)).findById(u.getId());
         Mockito.verify(groupRepository,times(1)).save(gWith);
+    }
+
+    @Test
+    void removeUserFromGroupShouldReturnGroupWithoutUser()
+    {
+        User u = new User();
+        Group gWithout = new Group("Group", u, new ArrayList<>(List.of()));
+        Group gWith = new Group("Group", u, new ArrayList<>(List.of(u)));
+
+        Mockito.when(groupRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(gWith));
+        Mockito.when(userRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(u));
+
+        assertTrue(groupService.removeUserFromGroup(gWith.getId(), u));
+        Mockito.verify(groupRepository,times(1)).findById(gWith.getId());
+        Mockito.verify(userRepository,times(1)).findById(u.getId());
+        Mockito.verify(groupRepository,times(1)).save(gWithout);
     }
 }
