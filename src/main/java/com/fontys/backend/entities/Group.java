@@ -25,16 +25,21 @@ public class Group {
     @ManyToOne
     private User owner;
 
+    @OneToMany
+    private List<Order> orders;
+
     @ManyToMany
     private List<User> users;
 
     public Group(int id) {
         this.id = id;
+        this.orders = new ArrayList<>();
         this.users = new ArrayList<>();
     }
 
     public Group(String name) {
         this.name = name;
+        this.orders = new ArrayList<>();
         this.users = new ArrayList<>();
     }
 
@@ -42,5 +47,6 @@ public class Group {
         this.name = name;
         this.owner = owner;
         this.users = users;
+        this.orders = new ArrayList<>();
     }
 }
