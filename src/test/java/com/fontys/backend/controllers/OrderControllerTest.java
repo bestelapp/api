@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -61,7 +60,7 @@ class OrderControllerTest {
     void getByIdShouldReturnOrder()
     {
         List<Product> productList = Collections.singletonList(new Product());
-        Order o = new Order(1,new User(),new User(),productList);
+        Order o = new Order(1,new User(),null,productList);
 
         Mockito.when(orderRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(o));
 

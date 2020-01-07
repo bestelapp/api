@@ -1,7 +1,7 @@
 package com.fontys.backend.services;
 
 import com.fontys.backend.entities.Group;
-import com.fontys.backend.entities.Product;
+import com.fontys.backend.entities.Order;
 import com.fontys.backend.entities.User;
 import com.fontys.backend.repositories.GroupRepository;
 import com.fontys.backend.repositories.UserRepository;
@@ -82,5 +82,9 @@ public class GroupService {
             return false;
         }
         return false;
+    }
+
+    public void addOrder(Group group, Order order) {
+        group.getOrders().add(order);
     }
 }
