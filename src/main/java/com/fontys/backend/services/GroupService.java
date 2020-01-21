@@ -52,6 +52,11 @@ public class GroupService {
         return null;
     }
 
+    public Group findById(Integer id) {
+        Optional<Group> group = groupRepository.findById(id);
+        return group.orElse(null);
+    }
+
     public List<Group> getAll() {
         return groupRepository.findAll();
     }

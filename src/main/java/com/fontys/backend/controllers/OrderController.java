@@ -55,7 +55,7 @@ public class OrderController {
             products.add(productService.create(new Product(p.getName(),p.getAmount())));
         }
         User u = userService.getById(order.getUser().getId());
-        Group g = groupService.getById(groupId);
+        Group g = groupService.findById(groupId);
         if (u != null && g != null && !products.isEmpty()) {
             Order o = new Order(u,products);
             groupService.addOrder(g, o);
