@@ -60,7 +60,7 @@ class OrderControllerTest {
     void getByIdShouldReturnOrder()
     {
         List<Product> productList = Collections.singletonList(new Product());
-        Order o = new Order(1,new User(),null,productList);
+        Order o = new Order(1,new User(),null,productList,0);
 
         Mockito.when(orderRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(o));
 
@@ -73,14 +73,29 @@ class OrderControllerTest {
     {
         List<Product> productList = Collections.singletonList(new Product());
         User u = new User("UserOne","","");
-        Order oWithout = new Order(1,u,null,productList);
-        Order oWith = new Order(1,u,new User("UserOne","",""),productList);
+        Order oWithout = new Order(1,u,null,productList,0);
+        Order oWith = new Order(1,u,new User("UserOne","",""),productList,0);
 
         Mockito.when(orderRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(oWithout));
         Mockito.when(userRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(u));
 
         assertTrue(orderService.claim(u.getId(),oWithout.getId()));
         Mockito.verify(userRepository,times(1)).findById(u.getId());
+        Mockito.verify(orderRepository,times(1)).findById(oWithout.getId());
+        Mockito.verify(orderRepository,times(1)).save(oWith);
+    }
+
+    @Test
+    void closeOrderShouldReturnTrue()
+    {
+        List<Product> productList = Collections.singletonList(new Product());
+        User u = new User("UserOne","","");
+        Order oWithout = new Order(1,u,u,productList,0);
+        Order oWith = new Order(1,u,u,productList,10);
+
+        Mockito.when(orderRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(oWithout));
+
+        assertTrue(orderService.close(oWithout.getId(),10));
         Mockito.verify(orderRepository,times(1)).findById(oWithout.getId());
         Mockito.verify(orderRepository,times(1)).save(oWith);
     }

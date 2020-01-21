@@ -29,6 +29,9 @@ public class Order {
     @ManyToMany
     private List<Product> products;
 
+    @Column
+    private double price;
+
     public Order(User user, List<Product> products) {
         this.user = user;
         this.products = products;

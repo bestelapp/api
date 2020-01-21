@@ -39,6 +39,15 @@ public class OrderController {
         return orderService.getById(id);
     }
 
+    @RequestMapping("/getAllByClaimUser/{id}")
+    public List<Order> getAllByClaimUser(@PathVariable("id") int id) {
+        User u = userService.getById(id);
+        if (u != null) {
+            return orderService.getAllByClaimUser(u);
+        }
+        return null;
+    }
+
     @PostMapping("/create/{groupId}")
     public Order create(@RequestBody Order order, @PathVariable("groupId") int groupId) {
         List<Product> products = new ArrayList<>();
@@ -63,5 +72,10 @@ public class OrderController {
             return orderService.claim(u.getId(), o.getId());
         }
         return false;
+    }
+
+    @PostMapping("/close")
+    public Boolean close(@RequestBody Order order) {
+            return orderService.close(order.getId(), order.getPrice());
     }
 }
