@@ -29,6 +29,10 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
+    public List<Order> getAllByClaimUser(User user) {
+        return orderRepository.getAllByClaimUser(user);
+    }
+
     public Order create(Order order) {
         return orderRepository.save(order);
     }
@@ -38,6 +42,16 @@ public class OrderService {
         Order order = getById(orderId);
         if (user.isPresent() && order != null) {
             order.setClaimUser(user.get());
+            orderRepository.save(order);
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean close(int orderId, double price) {
+        Order order = getById(orderId);
+        if (order != null) {
+            order.setPrice(price);
             orderRepository.save(order);
             return true;
         }

@@ -57,12 +57,12 @@ public class GroupService {
     }
 
     public Boolean addUserToGroup(Integer id, User user) {
-        Group g = getById(id);
-        if (g != null) {
+        Optional<Group> g = groupRepository.findById(id);
+        if (g.isPresent()) {
             Optional<User> u = userRepository.findById(user.getId());
-            if (u.isPresent() && !g.getUsers().contains(u.get())) {
-                g.getUsers().add(u.get());
-                groupRepository.save(g);
+            if (u.isPresent() && !g.get().getUsers().contains(u.get())) {
+                g.get().getUsers().add(u.get());
+                groupRepository.save(g.get());
                 return true;
             }
             return false;
@@ -71,12 +71,12 @@ public class GroupService {
     }
 
     public Boolean removeUserFromGroup(Integer id, User user) {
-        Group g = getById(id);
-        if (g != null) {
+        Optional<Group> g = groupRepository.findById(id);
+        if (g.isPresent()) {
             Optional<User> u = userRepository.findById(user.getId());
-            if (u.isPresent() && g.getUsers().contains(u.get())) {
-                g.getUsers().remove(u.get());
-                groupRepository.save(g);
+            if (u.isPresent() && g.get().getUsers().contains(u.get())) {
+                g.get().getUsers().remove(u.get());
+                groupRepository.save(g.get());
                 return true;
             }
             return false;
